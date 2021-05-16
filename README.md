@@ -92,6 +92,19 @@ Let's assume a gaming fan Prakhar Agrawal joined his server let's what he need t
      </tr>
 </table>
 
+**Website screeshot**
+
+<table>
+     <tr>
+          <td><img src="https://i.imgur.com/dyZ2S9Y.png" /><br /><center><b>Login page</b></center></td>
+          <td><img src="https://i.imgur.com/4OQ5EUT.png" /><br /><center><b>Add Community</b></center></td>
+     </tr>
+     <tr>
+          <td><img src="https://i.imgur.com/6GmPZDd.png" /><br /><center><b>Dashboard</b></center></td>
+          <td><img src="https://i.imgur.com/Rstblyz.png" /><br /><center><b>Add Merchandise detail</b></center></td>
+     </tr>
+</table>
+
 ## :computer: Tech stack
 * Python
 * Django
