@@ -95,7 +95,8 @@ Let's assume a gaming fan Prakhar Agrawal joined his server let's what he need t
 ## :computer: Tech stack
 * Python
 * Django
-* 
+* React
+* REST
 
 
 ### :satellite: Future Work
