@@ -66,6 +66,18 @@ async def create_role(ctx, *, name):
 	await guild.create_role(name=name)
 	await ctx.send(f'Role `{name}` has been created 🧗‍')
 
+@bot.command(pass_context=True, name="kick")
+@has_permissions(kick_members=True)
+async def kick(ctx, *, target: Member):
+    if target.server_permissions.administrator:
+        await bot.say("Target is an admin")
+    else:
+        try:
+            await bot.kick(target)
+            await bot.say("Kicked user{target}")
+        except Exception:
+            await bot.say("Something went wrong") 
+            
 #Ask permission for volunteer role from admin
 @bot.command(brief='🔑 Ask permission for volunteer role from admin')
 async def ask_permission(ctx,role1: discord.Role,role2 : discord.Role):
