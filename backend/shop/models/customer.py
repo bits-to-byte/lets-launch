@@ -35,3 +35,5 @@ class Order(models.Model):
     date_ordered = models.DateTimeField(default=timezone.now)
 
     status = models.IntegerField(choices=ORDER_STATUS, default=1)
+
+    amount = models.IntegerField(default=0)
