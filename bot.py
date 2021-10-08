@@ -31,8 +31,11 @@ async def on_member_join(member):
 
 #bot commands
 @bot.command(brief='🧪 test command')  #bot test command
-async def ping (ctx):
-    await ctx.send("pong")
+async def ping (ctx, member):
+    guild = member.guild
+    if guild.system_channel is not None:
+        to_send = 'Hello {0.mention} it seems you pinged the bot, what do you want to ask?\n type out $help to get all the availabe commands'.format(member)
+        await ctx.send(to_send)
 
 @bot.command(brief='🗒️ Show the list of channels on the server')  #channel list
 async def List (ctx):
@@ -90,6 +93,14 @@ async def giverole(ctx, user: discord.Member, role: discord.Role):
     	channel = discord.utils.get(ctx.guild.channels, name='general')
     	await ctx.send(f"Hey! {ctx.author.name} {user.name} is now a part of your army 🔫")
     	await channel.send(f' @here {user.name} is now a Volunteer 😲. If you want to join the army and volunteer for the channel let us know by asking for a permission 🥰 ')
+
+@bot.command(brief='Help to add task')
+@commands.has_permissions(manage_roles=True) 
+async def add_task(ctx, user: discord.Member, task, role: discord.Role):
+    if (str(role) == 'Volunteer' or str(role) == 'Admin'):
+        channel = discord.utils.get(ctx.guild.channels, name='task')
+    	await ctx.send(f"Hey! a new task is published on #task by {user.name}")
+    	await channel.send(f'Hey all this is the new task {task}')    
     
 
 @bot.command(pass_context=True , brief='🛒 Manage merchandise')
