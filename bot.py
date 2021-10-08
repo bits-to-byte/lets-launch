@@ -5,6 +5,12 @@ import requests
 import json
 import os
 from dotenv import load_dotenv
+import asyncio
+from time import gmtime
+from time import strftime
+from models.cldr import Calendar
+from models.commands import Commands
+ 
 load_dotenv()
 
 intents = discord.Intents.all()
@@ -133,6 +139,51 @@ async def post(ctx):
     channel = discord.utils.get(ctx.guild.channels, name='general')
     #channel_id = channel.id
     await channel.send(f'@here the Merchandise has been Updated with New and exciting products. Check them out !! 🛍️🛍️')
+
+async def get_calendar_event(self):
+    cldr = Calendar()
+    cldr.launch()
+    self.event_date = cldr.seconds_event
+    self.name_event = cldr.name_event
+    if cldr.info_event and cldr.link_event:
+        self.link_event = cldr.link_event
+    if self.event_date == 0:
+        print("No event soon (last 10 minutes)")
+    elif self.event_date < 0:
+        print("Meeting '{}' has started since {:.2f} seconds".format(self.name_event, self.event_date))
+    else:
+        print("Meeting '{}' in {:.2f} seconds".format(self.name_event, self.event_date))
+    await asyncio.sleep(3)
+
+async def check_reunion_is_soon(self):
+    if self.event_date and self.name_event and self.event_date > self.min_time_event and self.event_date < self.max_time_event:
+        await self.send_channel_msg("{} will start in: {} ({})".format(self.name_event, strftime("%M:%S", gmtime(int(self.event_date))), self.link_event))
+        await asyncio.sleep(self.event_date)
+    elif self.event_date and self.name_event and self.event_date >= -60 and self.event_date <= 0:
+        await self.send_channel_msg("@here {} has started, it's time!!".format(self.name_event))
+        await asyncio.sleep(self.time_to_wait)
+    await asyncio.sleep(3)
+
+async def on_ready(self):
+    self.main_channel = self.get_channel(self.id_main_channel)
+    self.change_status("Working on the api")
+    await self.change_presence(status=discord.Status.idle, activity=self.activity)
+    while True:
+        await self.get_calendar_event()
+        await self.check_reunion_is_soon()
+        await asyncio.sleep(3)
+
+async def send_channel_msg(self, msg):
+    await self.main_channel.send(msg)
+
+async def on_message(self, message):
+    if message.author == self.user:
+        return
+    msg_user_list = message.content.split()
+    msg_user = msg_user_list[0]
+    if msg_user_list[0][0] == self.identifier_cmd:
+        cmd = Commands(msg_user_list)
+        await message.channel.send(cmd.message_to_respond())
 
 
 bot.run ('TOKEN')
